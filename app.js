@@ -135,7 +135,7 @@ app.get("/getServiceList", auth, async (req, res) => {
 
 app.post("/createHomeWork", auth, async (req, res) => {
   try {
-    const { content, classStd, type } = req.body;
+    const { content, classStd, type, assignedDate } = req.body;
 
     if (!(content && classStd)) {
       res.status(400).send("All fields are mandatory");
@@ -145,6 +145,7 @@ app.post("/createHomeWork", auth, async (req, res) => {
       content,
       classStd,
       type,
+      assignedDate,
       homeworkId: uuid(),
     });
 

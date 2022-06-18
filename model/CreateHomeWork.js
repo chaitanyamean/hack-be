@@ -15,6 +15,9 @@ const createHomeWorkSchema = new mongoose.Schema({
     },
     homeworkId: {
         type: String,
+    },
+    assignedDate: {
+        type: String,
     }
 })
 
