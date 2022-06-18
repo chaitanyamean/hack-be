@@ -14,7 +14,7 @@ const jwt = require("jsonwebtoken");
 const auth = require("./middlewares/auth");
 const server = require("http").createServer(app);
 const uuid = require("uuid4");
-const classStandard = require("./model/classStandard");
+const ClassStandard = require("./model/ClassStandard");
 
 app.get("/", (req, res) => {
   res.json({
@@ -174,7 +174,7 @@ app.post("/addClass", auth, async(req,res) => {
 })
 
 app.get('/getClassStandards', auth, async(req,res) => {
-  const classStandards = await classStandard.find({})
+  const classStandards = await ClassStandard.find({})
   res.status(200).json(classStandards)
 })
 
