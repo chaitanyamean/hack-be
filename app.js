@@ -15,6 +15,7 @@ const auth = require("./middlewares/auth");
 const server = require("http").createServer(app);
 const uuid = require("uuid4");
 const ClassStandard = require("./model/ClassStandard");
+const success = require("./constants");
 
 app.get("/", (req, res) => {
   res.json({
@@ -25,7 +26,7 @@ app.get("/", (req, res) => {
 app.post("/register", async (req, res) => {
   console.log(req);
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, classId } = req.body;
     if (!(name && email && password)) {
       res.status(400).send("All fields are mandatory");
     }
@@ -42,6 +43,7 @@ app.post("/register", async (req, res) => {
       role,
       email: email.toLowerCase(),
       password: myEcryptPassword,
+      classId,
     });
 
     // Token
@@ -149,7 +151,7 @@ app.post("/createHomeWork", auth, async (req, res) => {
       homeworkId: uuid(),
     });
 
-    res.status(200).json(homeWork);
+    res.status(200).json(success);
   } catch (err) {
     console.log(err);
   }
@@ -177,6 +179,17 @@ app.post("/addClass", auth, async(req,res) => {
 app.get('/getClassStandards', auth, async(req,res) => {
   const classStandards = await ClassStandard.find({})
   res.status(200).json(classStandards)
+})
+
+app.get('/getHomeWork', auth, async(req,res) => {
+
+  const { classId } = req.body
+  // const getHomeWork = await 
+
+  const homeWork = await CreateHomeWork.find({classId})
+  console.log(homeWork);
+  res.status(200).json(classStandards)
+
 })
 
 module.exports = app;
