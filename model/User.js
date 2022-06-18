@@ -2,11 +2,7 @@ const mongoose = require('mongoose');
 
 
 const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        default: null
-    },
-    lastName: {
+    name: {
         type: String,
         default: null
     },
@@ -19,6 +15,9 @@ const userSchema = new mongoose.Schema({
     },
     token: {
         type: String
+    },
+    role: {
+        type: String,
     }
 })
 
