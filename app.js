@@ -188,7 +188,7 @@ app.get('/getHomeWork', auth, async(req,res) => {
 
   const homeWork = await CreateHomeWork.find({classId})
   console.log(homeWork);
-  res.status(200).json(classStandards)
+  res.status(200).json(homeWork)
 
 })
 
