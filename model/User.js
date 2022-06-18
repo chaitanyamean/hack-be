@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
+    },
+    classId: {
+        type: String,
     }
 })
 
