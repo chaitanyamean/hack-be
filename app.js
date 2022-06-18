@@ -25,8 +25,8 @@ app.get("/", (req, res) => {
 app.post("/register", async (req, res) => {
     console.log(req)
   try {
-    const { firstName, lastName, email, password } = req.body;
-    if (!(firstName && lastName && email && password)) {
+    const { name, email, password, role } = req.body;
+    if (!(name && email && password)) {
       res.status(400).send("All fields are mandatory");
     }
 
@@ -38,8 +38,8 @@ app.post("/register", async (req, res) => {
     const myEcryptPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
-      firstName,
-      lastName,
+      name,
+      role,
       email: email.toLowerCase(),
       password: myEcryptPassword,
     });
