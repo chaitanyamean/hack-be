@@ -182,13 +182,17 @@ app.get('/getClassStandards', auth, async(req,res) => {
 })
 
 app.get('/getHomeWork', auth, async(req,res) => {
+try {
 
   const { classId } = req.body
   // const getHomeWork = await 
-
+  console.log(classId)
   const homeWork = await CreateHomeWork.find({classId})
   console.log(homeWork);
   res.status(200).json(homeWork)
+} catch (err) {
+  console.log(err)
+}
 
 })
 
