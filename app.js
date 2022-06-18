@@ -5,9 +5,14 @@ const User = require("./model/User");
 const Service = require("./model/Service");
 const CreateHomeWork = require("./model/CreateHomeWork");
 const cors = require("cors");
-
+const fileUpload = require('express-fileupload');
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: "/tmp/",
+}));
 app.use(cors());
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -15,7 +20,13 @@ const auth = require("./middlewares/auth");
 const server = require("http").createServer(app);
 const uuid = require("uuid4");
 const ClassStandard = require("./model/ClassStandard");
-const success = require("./constants");
+const cloudinary = require('cloudinary').v2
+
+cloudinary.config({
+  cloud_name: "dzgqn90ha",
+  api_key: "671699842544666",
+  api_secret: "AVMF89ZUkPI2rXiTG-YitUhgO0o"
+});
 
 app.get("/", (req, res) => {
   res.json({
@@ -139,9 +150,20 @@ app.post("/createHomeWork", auth, async (req, res) => {
   try {
     const { content, classStd, type, assignedDate } = req.body;
 
-    if (!(content && classStd)) {
-      res.status(400).send("All fields are mandatory");
-    }
+    // if (!(content && classStd)) {
+    //   res.status(400).send("All fields are mandatory");
+    // }
+let url = "";
+if(req.files && req.files.image_file) {
+  let file = req.files.image_file
+  console.log("FILES 160",file, req.body)
+  result = await cloudinary.uploader.upload(file.tempFilePath, {
+    folder: 'users'
+  })
+  console.log(result);
+  url = result.secure_url;
+}
+
 
     const homeWork = await CreateHomeWork.create({
       content,
@@ -149,9 +171,10 @@ app.post("/createHomeWork", auth, async (req, res) => {
       type,
       assignedDate,
       homeworkId: uuid(),
+      url
     });
-
-    res.status(200).json(success);
+    
+    res.status(200).send(homeWork);
   } catch (err) {
     console.log(err);
   }
@@ -181,19 +204,15 @@ app.get('/getClassStandards', auth, async(req,res) => {
   res.status(200).json(classStandards)
 })
 
-app.get('/getHomeWork', auth, async(req,res) => {
+app.post('/getHomeWork', auth, async(req,res) => {
 try {
-
   const { classId } = req.body
-  // const getHomeWork = await 
-  console.log(classId)
-  const homeWork = await CreateHomeWork.find({classId})
+  const homeWork = await CreateHomeWork.find({classStd: classId})
   console.log(homeWork);
   res.status(200).json(homeWork)
 } catch (err) {
   console.log(err)
 }
-
 })
 
 module.exports = app;

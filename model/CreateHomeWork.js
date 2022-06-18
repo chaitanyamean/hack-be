@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const createHomeWorkSchema = new mongoose.Schema({
     content: {
         type: String,
-        default: null
     },
     classStd: {
         type: String,
@@ -17,6 +16,9 @@ const createHomeWorkSchema = new mongoose.Schema({
         type: String,
     },
     assignedDate: {
+        type: String,
+    },
+    url: {
         type: String,
     }
 })
